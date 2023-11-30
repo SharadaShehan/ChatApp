@@ -10,11 +10,14 @@ export default gql`
     }
 
     extend type Query {
+        me: User
         users: [User!]!
         user(id: ID!): User
     }
 
     extend type Mutation {
-        signUP(username: String!, email: String!, name: String!, password: String!): User
+        signUp(username: String!, email: String!, name: String!, password: String!): User
+        signIn(email: String!, password: String!): User
+        signOut: Boolean
     }
 `

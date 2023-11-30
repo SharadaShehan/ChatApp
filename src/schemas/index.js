@@ -1,1 +1,1 @@
-export { default as signUP } from './user.js'
+export * from './user.js'

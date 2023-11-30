@@ -1,20 +1,44 @@
 import { ApolloServer } from 'apollo-server-express'
 import express from 'express'
+import session from 'express-session'
 import mongoose from 'mongoose'
 import typeDefs from './typeDefs/index.js'
 import resolvers from './resolvers/index.js'
-import { APP_PORT, IN_PROD } from './config.js'
+import { APP_PORT, IN_PROD, DB_HOST, DB_PORT, DB_NAME, SESS_NAME, SESS_SECRET, SESS_LIFETIME } from './config.js'
 
 (async () => {
   try {
-    await mongoose.connect('mongodb://0.0.0.0:27017/chat')
+    await mongoose.connect(`mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`)
       .then(() => console.log('Database connected successfully'))
       .catch(err => console.error(err))
 
     const app = express()
     app.disable('x-powered-by')
 
-    const server = new ApolloServer({ typeDefs, resolvers, playground: !IN_PROD })
+    app.use(session({
+      name: SESS_NAME,
+      secret: SESS_SECRET,
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        maxAge: parseInt(SESS_LIFETIME),
+        sameSite: true,
+        secure: IN_PROD
+      }
+    }))
+
+    const server = new ApolloServer({
+      typeDefs,
+      resolvers,
+      playground: IN_PROD
+        ? false
+        : {
+            settings: {
+              'request.credentials': 'include'
+            }
+          },
+      context: ({ req, res }) => ({ req, res })
+    })
 
     server.start().then(res => {
       server.applyMiddleware({ app })
