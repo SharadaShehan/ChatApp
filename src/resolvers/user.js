@@ -32,10 +32,6 @@ export default {
       return user
     },
     signIn: async (root, args, { req }, info) => {
-      const { userId } = req.session
-      if (userId) {
-        return await User.findById(userId)
-      }
       await signIn.validateAsync(args, { abortEarly: false })
       const user = await Auth.attemptSignIn(args.email, args.password)
       req.session.userId = user.id
