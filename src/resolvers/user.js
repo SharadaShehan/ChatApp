@@ -41,5 +41,11 @@ export default {
       Auth.checkSignedIn(req)
       return await Auth.signOut(req, res)
     }
+  },
+  User: {
+    chats: async (user, args, context, info) => {
+      await user.populate('chats')
+      return user.chats
+    }
   }
 }

@@ -35,3 +35,51 @@ query{
     }
 }
 
+mutation {
+  startChat(title:"chat 1", userIds:["6568660bb656a99b9ad15b09"]){
+    id
+    title
+    users{
+      id
+      name
+      email
+      username
+    }
+  }
+}
+
+query{
+    users{
+        chats{
+            id
+            title
+            users{
+                id
+                name
+                email
+                username
+            }
+            lastMessage{
+                id
+            }
+            messages{
+                id
+            }
+        }
+    }
+}
+
+query{
+    me {
+        chats{
+            users{
+                chats{
+                    users{
+                        id
+                    }
+                }
+            }
+        }
+    }
+}
+

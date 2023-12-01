@@ -6,7 +6,9 @@ export default gql`
         username: String!
         email: String!
         name: String!
+        chats: [Chat!]!
         createdAt: String!
+        updatedAt: String!
     }
 
     extend type Query {
