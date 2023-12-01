@@ -18,7 +18,8 @@ import { APP_PORT, IN_PROD, DB_HOST, DB_PORT, DB_NAME, SESS_NAME, SESS_SECRET, S
     app.use(session({
       name: SESS_NAME,
       secret: SESS_SECRET,
-      resave: false,
+      resave: true,
+      rolling: true,
       saveUninitialized: false,
       cookie: {
         maxAge: parseInt(SESS_LIFETIME),
